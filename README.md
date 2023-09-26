@@ -11,7 +11,9 @@ This repo comes with a basic frontend to help users stand up a proof of concept 
 ## Step 1:
 The first step of utilizing this repo is performing a git clone of the repository.
 
-```git clone https://github.com/aws-rdoty/Amazon-Bedrock-Snowflake-POC.git```
+```
+git clone https://github.com/aws-rdoty/Amazon-Bedrock-Snowflake-POC.git
+```
 
 After cloning the repo onto your local machine, open it up in your favorite code editor.The file structure of this repo is broken into 3 key files,
 the app.py file, the moma_examples.yaml file, and the requirements.txt. The app.py file houses majority of the logic for the application, it contains the streamlit app,
