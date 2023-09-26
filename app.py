@@ -40,6 +40,10 @@ HUGGING_FACE_EMBEDDINGS_MODEL = os.environ.get(
     "HUGGING_FACE_EMBEDDINGS_MODEL", "sentence-transformers/all-MiniLM-L6-v2"
 )
 def main():
+    """
+    This is the primary function that is rendering the frontend and the functionality of the application.
+    """
+    #  set the page configuration, with title, icon type of layout and sidebar state
     st.set_page_config(
         page_title="NLQ Demo",
         page_icon="🔎",
@@ -51,6 +55,7 @@ def main():
 
     NO_ANSWER_MSG = "Sorry, I was unable to answer your question."
 
+    #  setting parameters for the LLM of your choice
     parameters = {
         "max_tokens_to_sample": MAX_TOKENS_TO_SAMPLE,
         "temperature": TEMPERATURE,
@@ -58,18 +63,18 @@ def main():
         "top_p": TOP_P,
         "stop_sequences": STOP_SEQUENCES,
     }
-
+    # configuring your instance of Amazon bedrock, selecting the CLI profile, modelID, endpoint url and region.
     llm = Bedrock(
-        credentials_profile_name="bedrock",
+        credentials_profile_name=os.getenv("aws_cli_profile"),
         model_id="anthropic.claude-v2",
         endpoint_url="https://bedrock.us-east-1.amazonaws.com",
         region_name="us-east-1",
         verbose=True
     )
 
-    # define datasource uri
+    # Defining the Snowflake database URI
     snowflake_url = get_snowflake_uri()
-    db = SQLDatabase.from_uri(snowflake_url,sample_rows_in_table_info=1, include_tables=["artists", "artworks"])
+    db = SQLDatabase.from_uri(snowflake_url,sample_rows_in_table_info=1, include_tables=os.getenv("tables"))
 
     # load examples for few-shot prompting
     examples = load_samples()
@@ -92,7 +97,7 @@ def main():
 
     if "query_text" not in st.session_state:
         st.session_state["query_text"] = []
-
+    # creating the basic components of the frontend
     tab1, tab2, tab3 = st.tabs(["Chatbot", "Details", "Technologies"])
 
     with tab1:
@@ -135,6 +140,7 @@ def main():
                     )
                 st.markdown(" ")
             with st.container():
+                # text input box
                 input_text = st.text_input(
                     "Ask a question:",
                     "",
@@ -145,12 +151,14 @@ def main():
                 logging.info(input_text)
 
                 user_input = st.session_state["query"]
-
+                # if user puts in a question
                 if user_input:
                     with st.spinner(text="Thinking..."):
+                        # prints the question to the front end
                         st.session_state.past.append(user_input)
                         print(user_input)
                         try:
+                            # then passes the user input (question) into the sql_db_chain which begins the execution
                             output = sql_db_chain(user_input)
                             st.session_state.generated.append(output)
                             logging.info(st.session_state["query"])
@@ -170,6 +178,7 @@ def main():
                                     "assistant",
                                     avatar=f"{BASE_AVATAR_URL}/{ASSISTANT_ICON}",
                                 ):
+                                    # the generated answer is written to the front end
                                     st.write(st.session_state["generated"][i]["result"])
                                 with st.chat_message(
                                     "user",
@@ -299,6 +308,10 @@ def main():
 def get_snowflake_uri():
     # SQLAlchemy 2.0 reference: https://docs.sqlalchemy.org/en/20/dialects/postgresql.html
     # URI format: postgresql+psycopg2://user:pwd@hostname:port/dbname
+    """
+    This function initiates the creation of the snowflake URL for use with the SQLDatbaseChain
+    :return: The full snowflake URL
+    """
 
     snowflake_account = os.getenv("snowflake_account")
     username = os.getenv("username")
@@ -309,10 +322,12 @@ def get_snowflake_uri():
 
     # Building the Snowflake URL to use with the DB_chain
     snowflake_url = f"snowflake://{username}:{password}@{snowflake_account}/{database}/{schema}?role={role}"
-    # db = SQLDatabase.from_uri(snowflake_url, sample_rows_in_table_info=1, include_tables=["artists"])
     return snowflake_url
 def load_samples():
-    # Load the sql examples for few-shot prompting examples
+    """
+    Load the sql examples for few-shot prompting examples
+    :return: The sql samples in from the moma_examples.yaml file
+    """
     sql_samples = None
 
     with open("moma_examples.yaml", "r") as stream:
@@ -321,6 +336,13 @@ def load_samples():
     return sql_samples
 
 def load_few_shot_chain(llm, db, examples):
+    """
+
+    :param llm: Large Language model you are using
+    :param db: The Snowflake database URL
+    :param examples: The samples loaded from your examples file.
+    :return: The results from the SQLDatabaseChain
+    """
     example_prompt = PromptTemplate(
         input_variables=["table_info", "input", "sql_cmd", "sql_result", "answer"],
         template=(
@@ -345,6 +367,7 @@ def load_few_shot_chain(llm, db, examples):
         suffix=PROMPT_SUFFIX,
         input_variables=["table_info", "input", "top_k"],
     )
+    # Where the LLM, DB and prompts are all orchestrated to answer a user query.
     return SQLDatabaseChain.from_llm(
         llm,
         db,
@@ -355,11 +378,12 @@ def load_few_shot_chain(llm, db, examples):
     )
 
 
+# Function to clear the text from the screen
 def clear_text():
     st.session_state["query"] = st.session_state["query_text"]
     st.session_state["query_text"] = ""
 
-
+# function to clear the data stored in the session
 def clear_session():
     for key in st.session_state.keys():
         del st.session_state[key]
