@@ -20,16 +20,19 @@ the app.py file, the moma_examples.yaml file, and the requirements.txt. The app.
 along with connectors into snowflake and the interaction with Amazon Bedrock through LangChains SQLDatabaseChain.
 
 ## Step 2:
-Set up a python virtual environment, and ensure that you are using Python 3.9. The virtual environment will be extremely useful when you begin installing the requirements.
-After the virtual environment is created, ensure that it is activated, following the activation steps of the environment tool you are using. Likely:
+Set up a python virtual environment in the root directory of the repository and ensure that you are using Python 3.9. This can be done by running the following commands:
 ```
-source venv/bin activate 
+pip install virtualenv
+python<version> -m venv venv
 ```
-or
+The virtual environment will be extremely useful when you begin installing the requirements. If you need more clarification on the creation of the virtual environment please refer to this [blog](https://www.freecodecamp.org/news/how-to-setup-virtual-environments-in-python/).
+After the virtual environment is created, ensure that it is activated, following the activation steps of the virtual environment tool you are using. Likely:
 ```
-conda activate myenv
+cd venv
+cd bin
+source activate 
 ```
-After your virtual environment has been created and activated, you can install all of the requirements found in the requirements.txt file by running this command in your terminal:
+After your virtual environment has been created and activated, you can install all the requirements found in the requirements.txt file by running this command in your terminal:
 ```
 pip install -r requirements.txt
 ```
@@ -50,7 +53,7 @@ aws_cli_profile=<aws_cli_profile_name>
 ```
 Please ensure that your AWS CLI Profile has access to Amazon Bedrock!
 
-Depending on the region and model that you are planning to use Amazon Bedrock in, you may need to reconfigure lines 62-68 in the app.py file:
+Depending on the region and model that you are planning to use Amazon Bedrock in, you may need to reconfigure lines 19-25 in the snowflake_bedrock_query.py file:
 ```
 llm = Bedrock(
         credentials_profile_name=os.getenv("aws_cli_profile"),
@@ -64,7 +67,7 @@ llm = Bedrock(
 # Step 4
 If you would like to use this repo with the sample data, you will need to upload the two sample data files found in the sample data directory as two individual tables to Snowflake.
 
-If you would prefer to use your own database/schema/tables in your Snowflake instance, I would highly reccomend reviewing the moma_examples.yaml file to see how prompts are constructed for this sample application and spend the time creating 5 - 10 prompts that resemble your dataset more closely.
+If you would prefer to use your own database/schema/tables in your Snowflake instance, I would highly reccomend reviewing the moma_examples.yaml file in the SampleData directory to see how prompts are constructed for this sample application and spend the time creating 5 - 10 prompts that resemble your dataset more closely.
 # Step 5
 At this point the application should be ready to go. To start up the application with its basic frontend you simply need to run the following command in your terminal while in the root of the repositories directory:
 
