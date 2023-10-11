@@ -6,7 +6,26 @@ This is sample code demonstrating the use of Amazon Bedrock and Generative AI to
 The goal of this repo is to provide users the ability to use Amazon Bedrock and generative AI to take natural language questions, and transform them into relational database queries against Snowflake tables.
 This repo comes with a basic frontend to help users stand up a proof of concept in just a few minutes.
 
+The architecture and flow of the sample application will be:
+
+![Alt text](images/architecture.png "POC Architecture")
+
+When a user interacts with the GenAI app, the flow is as follows:
+
+1. The user makes a request, asking a natural language question based on the data in Snowflake to the GenAI app (app.py).
+2. This natural language question is passed into Amazon Bedrock, which takes the natural language question and creates a SQL query (snowflake_bedrock_query.py).
+3. The created SQL query is then executed against your tables in Snowflake to begin retrieving the data (snowflake_bedrock_query.py).
+4. The data is retrieved from Snowflake and passed back into Amazon Bedrock, to generate a natural language answer based on the retrieved data (snowflake_bedrock_query.py).
+5. The LLM returns a natural language response to the user through the streamlit frontend based on the retrieved data. (app.py)
+
 # How to use this Repo:
+
+## Prerequisites:
+
+1. Amazon Bedrock Access and CLI Credentials.
+2. Snowflake Account and ability to create tables
+3. If you are going to perform a git clone of this repo, and its your first time cloning from the AWS Gitlab, please ensure your machine is configured properly by following [these directions](https://w.amazon.com/bin/view/Users/vithoesl/GettingStartedWithGitlab/).
+4. Ensure Python 3.9 installed on your machine, it is the most stable version of Python for the packages we will be using, it can be downloaded [here](https://www.python.org/downloads/release/python-3911/).
 
 ## Step 1:
 The first step of utilizing this repo is performing a git clone of the repository.
@@ -23,14 +42,15 @@ along with connectors into snowflake and the interaction with Amazon Bedrock thr
 Set up a python virtual environment in the root directory of the repository and ensure that you are using Python 3.9. This can be done by running the following commands:
 ```
 pip install virtualenv
-python<version> -m venv venv
+python3.9 -m venv venv
 ```
 The virtual environment will be extremely useful when you begin installing the requirements. If you need more clarification on the creation of the virtual environment please refer to this [blog](https://www.freecodecamp.org/news/how-to-setup-virtual-environments-in-python/).
 After the virtual environment is created, ensure that it is activated, following the activation steps of the virtual environment tool you are using. Likely:
 ```
 cd venv
 cd bin
-source activate 
+source activate
+cd ../../ 
 ```
 After your virtual environment has been created and activated, you can install all the requirements found in the requirements.txt file by running this command in the root of this repos directory in your terminal:
 ```
