@@ -78,7 +78,7 @@ Depending on the region and model that you are planning to use Amazon Bedrock in
 llm = Bedrock(
         credentials_profile_name=os.getenv("aws_cli_profile"),
         model_id="anthropic.claude-v2",
-        endpoint_url="https://bedrock.us-east-1.amazonaws.com",
+        endpoint_url="https://bedrock-runtime.us-east-1.amazonaws.com",
         region_name="us-east-1",
         verbose=True
     )

@@ -19,7 +19,7 @@ load_dotenv()
 llm = Bedrock(
     credentials_profile_name=os.getenv("profile_name"),
     model_id="amazon.titan-text-express-v1",
-    endpoint_url="https://bedrock.us-east-1.amazonaws.com",
+    endpoint_url="https://bedrock-runtime.us-east-1.amazonaws.com",
     region_name="us-east-1",
     verbose=True
 )
