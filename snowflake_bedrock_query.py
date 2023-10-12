@@ -41,7 +41,7 @@ def snowflake_answer(question):
 
     sql_db_chain = load_few_shot_chain(llm, db, examples)
     answer = sql_db_chain(question)
-    # return answer["result"]
+
     return answer["intermediate_steps"][1], answer["result"]
 
 
@@ -120,5 +120,3 @@ def load_few_shot_chain(llm, db, examples):
         return_intermediate_steps=True,
     )
 
-# print(type(snowflake_answer("How many artists are there?")))
-# print(snowflake_answer("How many artists are there?"))
