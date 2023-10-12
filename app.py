@@ -27,13 +27,13 @@ if question := st.chat_input("Ask about your data stored in Snowflake Tables"):
         message_placeholder = st.empty()
         # putting a spinning icon to show that the query is in progress
         with st.status("Determining the best possible answer!", expanded=True) as status:
-            # passing the question into the kendra search function, which later invokes the llm
+            # passing the question into the snowflake_answer function, which later invokes the llm
             answer = snowflake_answer(question)
             # writing the answer to the front end
             message_placeholder.markdown(f""" Answer:
                             {answer[1]}
                             """)
-            # writing the SQL query in code front end style on the side bar
+            # writing the SQL query in code front end style on the sidebar
             with st.sidebar:
                 st.title(f""":green[The SQL command to get this answer was:]""")
                 st.code(answer[0], language="sql")
