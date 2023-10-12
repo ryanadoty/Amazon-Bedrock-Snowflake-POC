@@ -33,9 +33,11 @@ The first step of utilizing this repo is performing a git clone of the repositor
 git clone https://github.com/aws-rdoty/Amazon-Bedrock-Snowflake-POC.git
 ```
 
-After cloning the repo onto your local machine, open it up in your favorite code editor.The file structure of this repo is broken into 3 key files,
-the app.py file, the moma_examples.yaml file, and the requirements.txt. The app.py file houses majority of the logic for the application, it contains the streamlit app,
-along with connectors into snowflake and the interaction with Amazon Bedrock through LangChains SQLDatabaseChain.
+After cloning the repo onto your local machine, open it up in your favorite code editor.The file structure of this repo is broken into 4 key files,
+the app.py file, the snowflake_bedrock_query.py file, the moma_examples.yaml file, and the requirements.txt. The app.py file houses the frontend application (streamlit app). 
+The snowflake_bedrock_query.py file contains connectors into snowflake and the interaction with Amazon Bedrock through LangChains SQLDatabaseChain.
+The moma_examples.yaml file contains several samples prompts that will be used to implement a few-shot prompting technique. Last, the requirements.txt
+file has all the requirements needed to get the sample application up and running.
 
 ## Step 2:
 Set up a python virtual environment in the root directory of the repository and ensure that you are using Python 3.9. This can be done by running the following commands:
