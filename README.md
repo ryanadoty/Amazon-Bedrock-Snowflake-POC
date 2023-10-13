@@ -85,14 +85,16 @@ llm = Bedrock(
     )
 ```
 
-# Step 4
+## Step 4
 If you would like to use this repo with the sample data, you will need to upload the two sample data files found in the sample data directory as two individual tables to Snowflake.
 
-If you would prefer to use your own database/schema/tables in your Snowflake instance, I would highly reccomend reviewing the moma_examples.yaml file in the SampleData directory to see how prompts are constructed for this sample application and spend the time creating 5 - 10 prompts that resemble your dataset more closely.
-# Step 5
-At this point the application should be ready to go. To start up the application with its basic frontend you simply need to run the following command in your terminal while in the root of the repositories directory:
+If you preferred to use your own database/schema/tables in your Snowflake instance, I would highly recommend reviewing the moma_examples.yaml file in the SampleData directory to see how prompts are constructed for this sample application and spend the time creating 5 - 10 prompts that resemble your dataset more closely.
+## Step 5
+At this point the application should be ready to go. To start up the application with its basic frontend you simply need to run the following command in your terminal while in the root of the repositories' directory:
 
 ```
 streamlit run app.py
 ```
 As soon as the application is up and running in your browser of choice you can begin asking natural language questions against your SnowFlake tables.
+
+## ***The contents of this repository represent my viewpoints and not of my past or current employers, including Amazon Web Services (AWS). All third-party libraries, modules, plugins, and SDKs are the property of their respective owners.***
